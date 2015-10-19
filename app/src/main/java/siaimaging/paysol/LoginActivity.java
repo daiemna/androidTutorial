@@ -32,7 +32,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import android.util.Log;
-
+import org.opencv.core.Mat;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
