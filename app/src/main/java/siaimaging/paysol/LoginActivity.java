@@ -3,6 +3,7 @@ package siaimaging.paysol;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -32,7 +33,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import android.util.Log;
-import org.opencv.core.Mat;
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -66,7 +67,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String className = LoginActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(className,"onCreate called!");
+        Log.i(className, "onCreate called!");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
@@ -93,10 +94,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        Button registerButton= (Button) findViewById(R.id.registerButton);
+        registerButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickRegisterUser();
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
 
+    private void onClickRegisterUser(){
+        Log.i(className,"onClickRegisterUser");
+        Intent faceCaptureIntent = new Intent(this,FaceCaptureActivity.class);
+        Log.i(className,"Launching intent FaceCaptureActivity");
+        startActivity(faceCaptureIntent);
+    }
     private void populateAutoComplete() {
         Log.i(className,"populateAutoComplete called!");
         if (!mayRequestContacts()) {
