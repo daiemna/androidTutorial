@@ -1,4 +1,4 @@
-package siaimaging.paysol;
+package siaimaging.paysol.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -30,8 +30,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import siaimaging.paysol.R;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import android.util.Log;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -64,7 +67,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
-    private static final String className = LoginActivity.class.getSimpleName();
+    private final String className = this.getClass().getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(className, "onCreate called!");
@@ -94,7 +98,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button registerButton= (Button) findViewById(R.id.registerButton);
+        Button registerButton = (Button) findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,14 +110,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    private void onClickRegisterUser(){
-        Log.i(className,"onClickRegisterUser");
-        Intent faceCaptureIntent = new Intent(this,FaceCaptureActivity.class);
-        Log.i(className,"Launching intent FaceCaptureActivity");
+    private void onClickRegisterUser() {
+        Log.i(className, "onClickRegisterUser");
+        Intent faceCaptureIntent = new Intent(this, FaceCaptureActivity.class);
+        Log.i(className, "Launching intent FaceCaptureActivity");
         startActivity(faceCaptureIntent);
     }
+
     private void populateAutoComplete() {
-        Log.i(className,"populateAutoComplete called!");
+        Log.i(className, "populateAutoComplete called!");
         if (!mayRequestContacts()) {
             return;
         }
@@ -122,7 +127,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private boolean mayRequestContacts() {
-        Log.i(className,"mayRequestContacts called!");
+        Log.i(className, "mayRequestContacts called!");
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
         }
@@ -150,7 +155,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        Log.i(className,"onRequestPermissionsResult called!");
+        Log.i(className, "onRequestPermissionsResult called!");
         if (requestCode == REQUEST_READ_CONTACTS) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 populateAutoComplete();
@@ -165,7 +170,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        Log.i(className,"attemptLogin called!");
+        Log.i(className, "attemptLogin called!");
         if (mAuthTask != null) {
             return;
         }
@@ -213,13 +218,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private boolean isEmailValid(String email) {
-        Log.i(className,"isEmailValid called!");
+        Log.i(className, "isEmailValid called!");
         //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        Log.i(className,"isPasswordValid called!");
+        Log.i(className, "isPasswordValid called!");
         //TODO: Replace this with your own logic
         return password.length() > 4;
     }
@@ -229,7 +234,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-        Log.i(className,"showProgress called!");
+        Log.i(className, "showProgress called!");
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
@@ -263,7 +268,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        Log.i(className,"onCreateLoader called!");
+        Log.i(className, "onCreateLoader called!");
         return new CursorLoader(this,
                 // Retrieve data rows for the device user's 'profile' contact.
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
@@ -281,7 +286,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        Log.i(className,"onLoadFinished called!");
+        Log.i(className, "onLoadFinished called!");
         List<String> emails = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -294,7 +299,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
-        Log.i(className,"onLoaderRest called!");
+        Log.i(className, "onLoaderRest called!");
     }
 
     private interface ProfileQuery {
@@ -310,7 +315,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        Log.i(className,"addEmailsToAutoComplete called!");
+        Log.i(className, "addEmailsToAutoComplete called!");
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
@@ -329,7 +334,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String className = UserLoginTask.class.getSimpleName();
 
         UserLoginTask(String email, String password) {
-            Log.i(className,"UserLoginTask called!");
+            Log.i(className, "UserLoginTask called!");
             mEmail = email;
             mPassword = password;
         }
@@ -337,7 +342,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-            Log.i(className,"doInBackground called!");
+            Log.i(className, "doInBackground called!");
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
@@ -359,7 +364,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            Log.i(className,"onPostExecute called!");
+            Log.i(className, "onPostExecute called!");
             mAuthTask = null;
             showProgress(false);
 
@@ -373,7 +378,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected void onCancelled() {
-            Log.i(className,"onCancelled called!");
+            Log.i(className, "onCancelled called!");
             mAuthTask = null;
             showProgress(false);
         }

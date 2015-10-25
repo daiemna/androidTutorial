@@ -1,12 +1,17 @@
-package siaimaging.paysol;
+package siaimaging.paysol.activities;
 
 import android.annotation.SuppressLint;
+import android.hardware.Camera;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.util.Log;
+
+import siaimaging.paysol.R;
+import siaimaging.paysol.previews.CameraPreview;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -34,6 +39,10 @@ public class FaceCaptureActivity extends AppCompatActivity {
     private View mContentView;
     private View mControlsView;
     private boolean mVisible;
+    private CameraPreview mCameraPreview;
+    private Camera mCamera;
+    private final String className = this.getClass().getSimpleName();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +66,14 @@ public class FaceCaptureActivity extends AppCompatActivity {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+        findViewById(R.id.capture_button).setOnTouchListener(mDelayHideTouchListener);
+//        mCameraPreview = new CameraPreview(this);
+        mCameraPreview = (CameraPreview) findViewById(R.id.camera_preview);
+
+        if (safeCameraOpen(0)) {
+            mCameraPreview.setCamera(mCamera);
+            Log.i(className, "safeCameraOpen returned True");
+        }
     }
 
     @Override
@@ -165,4 +181,32 @@ public class FaceCaptureActivity extends AppCompatActivity {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
+
+    private void releaseCameraAndPreview() {
+        Log.i(className, "releaseCameraAndPreview() called!");
+        mCameraPreview.setCamera(null);
+        if (mCamera != null) {
+            mCamera.release();
+            mCamera = null;
+        }
+    }
+
+    private boolean safeCameraOpen(int id) {
+        Log.i(className, "safeCameraOpen(" + id + ")");
+        boolean qOpened = false;
+
+        try {
+            releaseCameraAndPreview();
+//            mCamera.set
+            mCamera = Camera.open(id);
+            qOpened = (mCamera != null);
+        } catch (Exception e) {
+            Log.e(className, "failed to open Camera");
+            e.printStackTrace();
+        }
+
+        return qOpened;
+    }
+
+
 }

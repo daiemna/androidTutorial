@@ -14,7 +14,7 @@
         completions."
     </string>
 
-    <string name="title_activity_face_capture">FaceCaptureActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_face_capture">Register</string>
+    <string name="camera_button_text">Capture</string>
+
 </resources>
