@@ -2,12 +2,13 @@ package siaimaging.paysol.activities;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.v4.os.EnvironmentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.VideoView;
 
 import siaimaging.paysol.R;
@@ -21,15 +22,46 @@ public class FaceCaptureActivity extends AppCompatActivity {
     static final int REQUEST_VIDEO_CAPTURE = 1;
     private final String className = this.getClass().getSimpleName();
 
+    private Uri mVideoUri;
+    private boolean mVideoURISet;
+
+    public Uri getVideoURI() {
+        return mVideoUri;
+    }
+
+    public boolean isVideoURISet(){
+        return mVideoURISet;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mVideoURISet = false;
         setContentView(R.layout.activity_face_capture);
         mVideoView = (VideoView)findViewById(R.id.video_view);
-//        mVideoView.
+        Button saveButton = (Button)findViewById(R.id.face_save_button);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onClickSave();
+            }
+        });
     }
+
+    private void onClickSave(){
+        Intent registerUserIntent = new Intent(this, RegisterUserActivity.class);
+        startActivity(registerUserIntent);
+    }
+
+
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        dispatchTakeVideoIntent();
+    }
+
     private void dispatchTakeVideoIntent() {
         Log.i(className, "dispatchTakeVideoIntent() called");
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
@@ -40,28 +72,35 @@ public class FaceCaptureActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Log.i(className, "onActivityResult("+requestCode+","+resultCode+","+intent.getAction()+")");
+        Log.i(className, "onActivityResult(" + requestCode + "," + resultCode + "," + intent.getAction() + ")");
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             Log.i(className, "Populating video view where RESULT_OK : " + RESULT_OK);
-            Uri videoUri = intent.getData();
-            Log.i(className, "URI : " + videoUri.getEncodedPath());
-            mVideoView.setVideoURI(videoUri);
+            mVideoUri = intent.getData();
+            Log.i(className, "URI : " + mVideoUri.getEncodedPath());
+            mVideoView.setVideoURI(mVideoUri);
+            mVideoURISet = true;
         }else{
             Log.i(className, "Closing the FaceCaptureActivity");
+            mVideoURISet = false;
             this.finish();
         }
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        dispatchTakeVideoIntent();
     }
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
         mVideoView.start();
-//        mVideoView.pause();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//                Log.i(className, "launching LoginActivity after " + splash_delay_ms + "ms");
+                pauseVideo();
+            }
+        }, 1000);
+    }
+
+    private void pauseVideo(){
+        mVideoView.pause();
     }
 }
