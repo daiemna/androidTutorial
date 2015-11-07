@@ -11,7 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.VideoView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import siaimaging.paysol.R;
+import siaimaging.paysol.utils.DataStorage;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -43,18 +49,33 @@ public class FaceCaptureActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 onClickSave();
             }
         });
     }
 
     private void onClickSave(){
+        DataStorage storage = DataStorage.getInstance();
+        try{
+            Log.i(className, "creating Uri file!");
+            InputStream uriIS = getContentResolver().openInputStream(mVideoUri);
+            Log.i(className, "getting FaceVideoStorageFile");
+            OutputStream videoFile = storage.createPrivateFile(DataStorage.FaceVideoStorageFile);
+            int data;
+            while ((data = uriIS.read()) == -1) {
+                videoFile.write(data);
+            }
+            Log.i(className, "Data copied!");
+        }catch (Exception e){
+            Log.e(className, "Exception : " + e.toString());
+            finish();
+            return;
+        }
+
         Intent registerUserIntent = new Intent(this, RegisterUserActivity.class);
         startActivity(registerUserIntent);
+        finish();
     }
-
-
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

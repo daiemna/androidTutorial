@@ -16,8 +16,9 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-
     <string name="title_activity_face_capture">Register</string>
     <string name="camera_button_text">Capture</string>
-
+    <!--<string name="string">String</string>-->
+    <string name="error_field_empty">This field should not be empty</string>
+    <string name="error_password_fields_mismatch">Password should match with Retyped Password</string>
 </resources>

@@ -31,6 +31,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import siaimaging.paysol.R;
+import siaimaging.paysol.utils.DataStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +74,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(className, "onCreate called!");
         super.onCreate(savedInstanceState);
+//        DataStorage.getInstance().setContext(this);
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -98,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button registerButton = (Button) findViewById(R.id.registerButton);
+        Button registerButton = (Button) findViewById(R.id.register_button);
         registerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

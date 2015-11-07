@@ -14,7 +14,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="save"
+            android:text="continue"
             android:id="@+id/face_save_button"
             android:layout_gravity="center_horizontal|bottom"
             android:textColor="@color/colorPrimary"/>

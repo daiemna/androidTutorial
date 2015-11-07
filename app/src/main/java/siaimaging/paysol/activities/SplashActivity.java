@@ -37,6 +37,7 @@ public class SplashActivity extends Activity {
             public void run() {
                 Log.i(className, "launching LoginActivity after " + splash_delay_ms + "ms");
                 //launching Login Activity after 2 seconds
+                finish();
                 launchLoginActivity();
             }
         }, 5000);
