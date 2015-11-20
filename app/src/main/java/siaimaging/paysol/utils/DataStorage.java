@@ -8,7 +8,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 import siaimaging.paysol.domain.User;
@@ -24,6 +23,11 @@ public class DataStorage{
     private static DataStorage theInstance = new DataStorage();
     private static Context sContext;
     private String className = this.getClass().getName();
+
+
+    /*
+    * Use this method for getting the instance of data Storage.
+    */
     public static DataStorage getInstance() {
         return theInstance;
     }
@@ -54,6 +58,7 @@ public class DataStorage{
         // Get path for the file on external storage.  If external
         // storage is not currently mounted this will fail.
         File file = new File(sContext.getExternalFilesDir(null), name);
+        Log.i(className, "File path is :  "+ file.getAbsolutePath());
         if (file != null) {
             return file.exists();
         }
@@ -70,9 +75,12 @@ public class DataStorage{
         if(hasPrivateFile(PersonalDataStorageFile)){
             File file = new File(sContext.getExternalFilesDir(null),PersonalDataStorageFile);
             FileInputStream userFile = new FileInputStream(file);
-            Log.i(className, "File total sapce : " +((int) file.getTotalSpace()));
-            byte[] data = new byte[((int) file.getTotalSpace())];
-            if(userFile.read(data,0,((int) file.getTotalSpace())) > 0){
+            long fileSize = file.length();
+            Log.i(className, "file.getTotalSpace() : " + file.getTotalSpace());
+            Log.i(className, "file.getUsableSpace() : " + file.getUsableSpace());
+            Log.i(className, "fileSize : " + (int)fileSize);
+            byte[] data = new byte[((int) fileSize)];
+            if(userFile.read(data,0,((int) fileSize)) > 0){
                 String userData = new String(data);
                 return new User(userData,CSVSeprator);
             }else {

@@ -13,6 +13,7 @@ import java.io.OutputStream;
 
 import siaimaging.paysol.R;
 import siaimaging.paysol.domain.User;
+import siaimaging.paysol.utils.Cryptographer;
 import siaimaging.paysol.utils.DataStorage;
 
 public class RegisterUserActivity extends AppCompatActivity{
@@ -56,7 +57,7 @@ public class RegisterUserActivity extends AppCompatActivity{
 //            OutputStream personalDataFile = storage.createPrivateFile(DataStorage.PersonalDataStorageFile);
             User user = new User(mFirstNameField.getText().toString(),
                     mEmailView.getText().toString(),
-                    mPassowdField.getText().toString());
+                    Cryptographer.getInstance().getHash(mPassowdField.getText().toString()));
             user.setLastName(mLastNameField.getText().toString());
             storage.createUser(user);
         }catch (Exception e){

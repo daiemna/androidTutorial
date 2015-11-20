@@ -76,7 +76,7 @@ public class User {
                 mFirstName+seprator+
                 mLastName+seprator+
                 mEmail+seprator+
-                mPassword+seprator;
+                mPassword+"\n";
         return object;
     }
 }

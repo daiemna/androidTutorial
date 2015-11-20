@@ -3,6 +3,7 @@ package siaimaging.paysol;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import siaimaging.paysol.utils.DataStorage;
 
@@ -19,5 +20,11 @@ public class PaySolApplication extends Application {
         super.onCreate();
         PaySolApplication.sContext = getApplicationContext();
         DataStorage.getInstance().setContext(sContext);
+    }
+
+    public static void showMessage(CharSequence text){
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(sContext, text, duration);
+        toast.show();
     }
 }

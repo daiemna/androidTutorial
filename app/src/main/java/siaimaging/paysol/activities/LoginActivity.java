@@ -30,9 +30,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import siaimaging.paysol.PaySolApplication;
 import siaimaging.paysol.R;
+import siaimaging.paysol.domain.User;
+import siaimaging.paysol.utils.Cryptographer;
 import siaimaging.paysol.utils.DataStorage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,13 +54,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -110,6 +107,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        Log.i(className, "onPostResume()");
+        DataStorage storage = DataStorage.getInstance();
+        try {
+            User theUser = storage.getUser();
+            mEmailView.setText(theUser.getEmail());
+        }catch (IOException e){
+            Log.e(className,e.getMessage());
+        }
     }
 
     private void onClickRegisterUser() {
@@ -228,7 +238,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private boolean isPasswordValid(String password) {
         Log.i(className, "isPasswordValid called!");
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 2;
     }
 
     /**
@@ -311,7 +321,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         };
 
         int ADDRESS = 0;
-        int IS_PRIMARY = 1;
+//        int IS_PRIMARY = 1;
     }
 
 
@@ -321,7 +331,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
+        try {
+            User theUser = DataStorage.getInstance().getUser();
+            if(theUser != null) {
+                Log.i(className, "User : " + theUser.toCSVString(" "));
+                adapter.add(theUser.getEmail());
+            }
+        }catch(IOException e) {
+            Log.e(className,e.getMessage());
+        }
         mEmailView.setAdapter(adapter);
     }
 
@@ -343,25 +361,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
             Log.i(className, "doInBackground called!");
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+                User theUser = DataStorage.getInstance().getUser();
+                Log.i(className, "email verified : "+ theUser.getEmail().equals(mEmail));
+                Log.i(className, "password verified : "+Cryptographer.getHash(mPassword).equals(theUser.getPassword()));
+                Log.i(className, "the User Pass : " + theUser.getPassword());
+                Log.i(className, "pass field hash : " +  Cryptographer.getHash(mPassword));
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+                // TODO: something wrong with password verification
 
-            // TODO: register the new account here.
-            return true;
+                return theUser.getEmail().equals(mEmail) &&
+                        theUser.getPassword().equals(Cryptographer.getHash(mPassword));
+            }catch (IOException e){
+                Log.e(className,"ERROR : " + e.getMessage());
+            }
+            return false;
         }
 
         @Override
@@ -371,7 +386,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                finish();
+                PaySolApplication.showMessage("User Verified!");
+//                finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
