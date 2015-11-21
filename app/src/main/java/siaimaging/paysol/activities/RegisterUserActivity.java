@@ -9,8 +9,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.io.OutputStream;
-
 import siaimaging.paysol.R;
 import siaimaging.paysol.domain.User;
 import siaimaging.paysol.utils.Cryptographer;
@@ -44,9 +42,6 @@ public class RegisterUserActivity extends AppCompatActivity{
                     saveData();
                     finish();
                 }
-                else{
-                    //TODO: show message!
-                }
             }
         });
     }
@@ -57,7 +52,7 @@ public class RegisterUserActivity extends AppCompatActivity{
 //            OutputStream personalDataFile = storage.createPrivateFile(DataStorage.PersonalDataStorageFile);
             User user = new User(mFirstNameField.getText().toString(),
                     mEmailView.getText().toString(),
-                    Cryptographer.getInstance().getHash(mPassowdField.getText().toString()));
+                    Cryptographer.getHash(mPassowdField.getText().toString()));
             user.setLastName(mLastNameField.getText().toString());
             storage.createUser(user);
         }catch (Exception e){

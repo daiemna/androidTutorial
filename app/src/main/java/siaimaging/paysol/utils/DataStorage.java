@@ -14,6 +14,7 @@ import siaimaging.paysol.domain.User;
 
 /**
  * Created by dna on 11/5/15.
+ * Class is used for storage interface.
  */
 public class DataStorage{
     public static String FaceVideoStorageFile="28716c17230737bac15823aa8f681be4";
@@ -60,8 +61,10 @@ public class DataStorage{
         File file = new File(sContext.getExternalFilesDir(null), name);
         Log.i(className, "File path is :  "+ file.getAbsolutePath());
         if (file != null) {
+            Log.i(className, "File is not null and Exisist : "+ file.exists());
             return file.exists();
         }
+        Log.i(className, "File is null");
         return false;
     }
     public void createUser(User user) throws IOException{
@@ -73,6 +76,7 @@ public class DataStorage{
     public User getUser() throws IOException{
         Log.i(className,"getUser() called");
         if(hasPrivateFile(PersonalDataStorageFile)){
+            Log.i(className, "Found Personal data file!");
             File file = new File(sContext.getExternalFilesDir(null),PersonalDataStorageFile);
             FileInputStream userFile = new FileInputStream(file);
             long fileSize = file.length();

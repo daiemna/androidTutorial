@@ -116,7 +116,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         DataStorage storage = DataStorage.getInstance();
         try {
             User theUser = storage.getUser();
-            mEmailView.setText(theUser.getEmail());
+            if(theUser != null) {
+                mEmailView.setText(theUser.getEmail());
+            }
         }catch (IOException e){
             Log.e(className,e.getMessage());
         }
@@ -164,7 +166,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Callback received when a permissions request has been completed.
      */
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         Log.i(className, "onRequestPermissionsResult called!");
@@ -173,7 +175,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 populateAutoComplete();
             }
         }
-    }
+    }*/
 
 
     /**
@@ -364,6 +366,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Log.i(className, "doInBackground called!");
             try {
                 User theUser = DataStorage.getInstance().getUser();
+                if(theUser == null)
+                    return false;
                 Log.i(className, "email verified : "+ theUser.getEmail().equals(mEmail));
                 Log.i(className, "password verified : "+Cryptographer.getHash(mPassword).equals(theUser.getPassword()));
                 Log.i(className, "the User Pass : " + theUser.getPassword());
