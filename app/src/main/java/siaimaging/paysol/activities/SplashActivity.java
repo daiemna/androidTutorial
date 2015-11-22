@@ -38,7 +38,10 @@ public class SplashActivity extends Activity {
                 Log.i(className, "launching LoginActivity after " + splash_delay_ms + "ms");
                 //launching Login Activity after 2 seconds
                 finish();
+                //launchPaymentActivity();
                 launchLoginActivity();
+                //launchVerificationActivity();
+
             }
         }, 5000);
     }
@@ -48,4 +51,17 @@ public class SplashActivity extends Activity {
         Intent loginIntent = new Intent(this,LoginActivity.class);
         startActivity(loginIntent);
     }
+
+    private void launchPaymentActivity(){
+        Log.i(className, "launchPaymentActivity() called");
+        Intent paymentIntent = new Intent(this,PaymentActivity.class);
+        startActivity(paymentIntent);
+    }
+
+    private void launchVerificationActivity(){
+        Log.i(className, "launchVerificationActivity() called");
+        Intent verificationIntent = new Intent(this,VerificationActivity.class);
+        startActivity(verificationIntent);
+    }
+
 }

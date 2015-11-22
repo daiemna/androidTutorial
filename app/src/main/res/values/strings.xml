@@ -21,4 +21,14 @@
     <!--<string name="string">String</string>-->
     <string name="error_field_empty">This field should not be empty</string>
     <string name="error_password_fields_mismatch">Password should match with Retyped Password</string>
+    <string name="title_activity_payment">PaymentActivity</string>
+    <string name="title_activity_verification">VerificationActivity</string>
+
+    <string-array name="currencies">
+        <item>USD</item>
+        <item>EUR</item>
+        <item>PKR</item>
+    </string-array>
+    <string name="title_activity_verification_progress">VerificationProgress</string>
+
 </resources>
