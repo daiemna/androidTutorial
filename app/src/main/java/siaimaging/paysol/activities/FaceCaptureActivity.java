@@ -58,13 +58,17 @@ public class FaceCaptureActivity extends AppCompatActivity {
         DataStorage storage = DataStorage.getInstance();
         try{
             Log.i(className, "creating Uri file!");
-            InputStream uriIS = getContentResolver().openInputStream(mVideoUri);
+            InputStream uriInputStream = getContentResolver().openInputStream(mVideoUri);
             Log.i(className, "getting FaceVideoStorageFile");
             OutputStream videoFile = storage.createPrivateFile(DataStorage.FaceVideoStorageFile);
-            int data;
-            while ((data = uriIS.read()) == -1) {
-                videoFile.write(data);
+            int fileSize = uriInputStream.available();
+            Log.i(className, "video File size : " + fileSize);
+            byte[] data = new byte[fileSize];
+            if(uriInputStream.read(data,0,fileSize)> 0){
+
             }
+
+
             Log.i(className, "Data copied!");
         }catch (Exception e){
             Log.e(className, "Exception : " + e.toString());
@@ -87,6 +91,7 @@ public class FaceCaptureActivity extends AppCompatActivity {
         Log.i(className, "dispatchTakeVideoIntent() called");
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+            Log.i(className, "Starting activity for result!");
             startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
         }
     }
@@ -118,7 +123,7 @@ public class FaceCaptureActivity extends AppCompatActivity {
 //                Log.i(className, "launching LoginActivity after " + splash_delay_ms + "ms");
                 pauseVideo();
             }
-        }, 1000);
+        }, 500);
     }
 
     private void pauseVideo(){
